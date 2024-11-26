@@ -30,17 +30,25 @@ namespace labworkWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(GameAddDto dto) //Вывод таблицы
+        public async Task<IActionResult> Add(GameAddDto dto) 
         {
-
-            return View();
+            if(!ModelState.IsValid)
+            {
+                return View(dto);
+            }
+            var httpClient = new HttpClient();
+            var response = await httpClient.PutAsJsonAsync("http://localhost:5272/Game/Add", dto);
+            if(!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("api_erorr", "Ошибка валидации данных");
+                return View(dto);
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
         public IActionResult Add() //Вывод таблицы
         {
-            
-
             return View();
         }
         public IActionResult Privacy()
