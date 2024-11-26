@@ -1,0 +1,27 @@
+﻿@model List<GameDto>
+@{
+    ViewData["Title"] = "Главная страница";
+    var i = 1;
+}
+
+<a href="/Game/Add">Добавить игру</a>
+<div class="text-center">
+    <h1 class="display-4">Список игр</h1>
+    <table class="table">
+        <tr>
+            <td>Номер п/п</td>
+            <td>Название</td>
+            <td>Разработка/Публикация</td>
+            <td>Жанр</td>
+        </tr>
+        @foreach(var game in Model)
+        {
+            <tr>
+                <td>@game.Id</td>
+                <td>@game.Name</td>
+                <td>@game.FullCompany</td>
+                <td>@game.GenreName</td>
+            </tr>
+        }
+    </table></>
+</div>
