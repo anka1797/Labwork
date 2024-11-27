@@ -1,0 +1,44 @@
+﻿@model labworkWebApp.Models.GameViewModel.GameEditViewModel
+@{
+    ViewData["Title"] = "Страница редактирования";
+}
+<div class="text-center">
+    <h1 class="display-4">Форма редактирования информации</h1>
+</div>
+<div asp-validation-summary="All" class="alert-danger text-start"></div>
+
+    <form action="/Game/Edit" method="post">
+        <input type="hidden" name="Id" value="@Model?.Game?.Id"/>
+    <div class="mb-3">
+        <label for="Name">Название</label>
+        <input type="text" name="Name" value="@Model?.Game?.Name" class="form-control" required />
+    </div>
+    <div class="mb-3">
+         <label for="Developer"> Разработчик </label>
+        <input type="text" name="Developer" value="@Model?.Game?.Developer" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label for="Publisher"> Издатель </label>
+        <input type="text" name="Publisher" value="@Model?.Game?.Publisher" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label for="Category"> Категория </label>
+        <input type="text" name="Category" value="@Model?.Game?.Category" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label for="Access"> Ключ доступа </label>
+        <input type="password" name="Access" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label for="GenreId"> Жанр </label>
+        <select name="GenreId" class="form-control">
+            @foreach (var item in Model.Genres)
+            {
+                <option value="@item.Id" selected="@(item.Id==Model?.Game?.GenreId)">  
+                    @item.Name
+                </option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary"> Сохранить </button>
+</form>

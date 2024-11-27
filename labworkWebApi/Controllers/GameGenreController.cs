@@ -1,6 +1,4 @@
 ﻿using labworkData;
-using labworkWebApi.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace labworkWebApi.Controllers
@@ -51,7 +49,7 @@ namespace labworkWebApi.Controllers
             {
                 _context.GameGenres.Remove(genre);
                 _context.SaveChanges();
-            } 
+            }
         }
 
         //Редакирование студента

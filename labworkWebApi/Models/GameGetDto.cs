@@ -1,7 +1,4 @@
-﻿using labworkData;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace labworkWebApi.Models
+﻿namespace labworkWebApi.Models
 {
     public class GameGetDto
     {
@@ -10,7 +7,9 @@ namespace labworkWebApi.Models
         public string Developer { get; set; }
         public string? Publisher { get; set; }
         public string? Category { get; set; }
-        public string FullCompany {  get; set; }
+        public string FullCompany { get; set; }
+        public int GenreId { get; set; }
         public string GenreName { get; set; }
+        public string Access { get; set; }
     }
 }

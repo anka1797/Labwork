@@ -1,5 +1,4 @@
-﻿using labworkData;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace labworkData
 {
@@ -7,7 +6,7 @@ namespace labworkData
     {
         public DbSet<Game> Games { get; set; }
         public DbSet<GameGenre> GameGenres { get; set; }
-        public GameContext(DbContextOptions<GameContext> options): base(options)
+        public GameContext(DbContextOptions<GameContext> options) : base(options)
         {
 
         }

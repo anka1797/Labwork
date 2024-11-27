@@ -12,7 +12,7 @@ namespace labworkWebApi.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
-public class GameController (ILogger<GameController> _logger,
+public class GameController(ILogger<GameController> _logger,
         GameContext _context,
         IMapper _mapper,
         SingletonService _singletonService,
@@ -25,7 +25,7 @@ public class GameController (ILogger<GameController> _logger,
         var mail = _mailopthions;
         _singletonService.UserVisits.Add(DateTime.Now);
         //если время обращения больше 10 секунд, то он убирается из количества пользователей (количество вызовов по сути)
-        _singletonService.UserVisits = _singletonService.UserVisits.Where(x =>  x >= DateTime.Now.AddSeconds(-10)).ToList();
+        _singletonService.UserVisits = _singletonService.UserVisits.Where(x => x >= DateTime.Now.AddSeconds(-10)).ToList();
         //_transient2Service.Counter++;
         //_singletonService.Counter++; //можно использовать как счетчик 
         //_scopedService.Counter++;
@@ -86,16 +86,16 @@ public class GameController (ILogger<GameController> _logger,
     public void Delete(int id)
     {
         var game = _context.Games.FirstOrDefault(x => x.Id == id);
-        if(game != null)
+        if (game != null)
         {
             _context.Games.Remove(game);
             _context.SaveChanges();
-        } 
+        }
     }
 
-    //Редакирование студента
+    //Редакирование 
     [HttpPost]
-    public Game? Post([FromBody] Game model)
+    public Game? Edit([FromBody] Game model)
     {
         var game = _context.Games.FirstOrDefault(x => x.Id == model.Id);
         if (game != null)
@@ -104,6 +104,8 @@ public class GameController (ILogger<GameController> _logger,
             game.Developer = model.Developer;
             game.Publisher = model.Publisher;
             game.GenreId = model.GenreId;
+            game.Access = model.Access;
+            game.Category = model.Category;
 
             _context.Games.Update(game);
             _context.SaveChanges();

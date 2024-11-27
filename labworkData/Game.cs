@@ -9,12 +9,12 @@ namespace labworkData
         public int Id { get; set; }
         public string Name { get; set; }
         public string Developer { get; set; }
-        public string Publisher { get; set; }
+        public string? Publisher { get; set; }
 
         [ForeignKey(nameof(Genre))]
         public int GenreId { get; set; }
         public GameGenre? Genre { get; set; }
         public string Access { get; set; }
-        public string Category { get; set; }
+        public string? Category { get; set; }
     }
 }

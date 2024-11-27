@@ -4,9 +4,9 @@
     {
         public int Counter { get; set; }
         public TransientService(ScopedService scopedService, SingletonService singletonService)
-            {
-                scopedService.Counter++;
+        {
+            scopedService.Counter++;
 
-            }
+        }
     }
 }

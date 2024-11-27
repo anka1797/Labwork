@@ -1,34 +1,40 @@
-﻿@model GameAddDto
+﻿@model labworkWebApp.Models.GameViewModel.GameAddViewModel
 @{
 
 }
 <div class="text-center">
     <h1 class="display-4">Добавление игры</h1>
+</div>
 <div asp-validation-summary="All" class="alert-danger text-start"></div>
 <form action="/Game/Add" method="post">
     <div class="mb-3">
         <label for="Name">Название</label>
-            <input type="text" name="Name" value="@Model?.Name" class="form-control" required />
+            <input type="text" name="Name" value="@Model?.Game?.Name" class="form-control" required />
     </div>
     <div class="mb-3">
          <label for="Developer"> Разработчик </label>
-            <input type="text" name="Developer" value="@Model?.Developer" class="form-control" required />
+            <input type="text" name="Developer" value="@Model?.Game?.Developer" class="form-control" required />
     </div>
     <div class="mb-3">
         <label for="Publisher"> Издатель </label>
-            <input type="text" name="Publisher" value="@Model?.Publisher" class="form-control" />
+            <input type="text" name="Publisher" value="@Model?.Game?.Publisher" class="form-control" />
     </div>
     <div class="mb-3">
         <label for="Category"> Категория </label>
-            <input type="text" name="Category" value="@Model?.Category" class="form-control" />
+            <input type="text" name="Category" value="@Model?.Game?.Category" class="form-control" />
     </div>
     <div class="mb-3">
         <label for="Access"> Ключ доступа </label>
-            <input type="text" name="Access" class="form-control" required />
+            <input type="password" name="Access" class="form-control" value="@Model?.Game?.Access" required />
     </div>
     <div class="mb-3">
         <label for="GenreId"> Жанр </label>
-            <input type="text" name="GenreId" value="@Model?.GenreId" class="form-control" required />
+            <select name="GenreId" class="form-control">
+                @foreach(var item in @Model.Genres)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
     </div>
     <button type="submit" class="btn btn-primary"> Сохранить </button>
 </form>

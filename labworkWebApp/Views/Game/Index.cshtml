@@ -6,7 +6,13 @@
 
 <a href="/Game/Add">Добавить игру</a>
 <div class="text-center">
-    <h1 class="display-4">Список игр</h1>
+    <h1 class="display-4">Полный список игр</h1>
+    @if (!string.IsNullOrEmpty(TempData["Message"]?.ToString()))
+    {
+        <div class="alert alert-success text-start" role="alert">
+            @TempData["Message"]
+        </div>
+    }
     <table class="table">
         <tr>
             <td>Номер п/п</td>
@@ -21,7 +27,11 @@
                 <td>@game.Name</td>
                 <td>@game.FullCompany</td>
                 <td>@game.GenreName</td>
-            </tr>
+                <td><a href="@Url.Action("Edit", "Game", new {id = @game.Id})">Редактировать</a></td>
+                <td> <a href="/Game/Delete/@game.Id">Удалить</a></td>
+                </tr>
         }
     </table></>
 </div>
+
+

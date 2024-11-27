@@ -9,7 +9,7 @@ namespace labworkWebApp
 
             //подключение к базе
             //builder.Services.AddDbContext<GameContext>(options => options.UseSqlite("Data Source = game.db"));
-            
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 

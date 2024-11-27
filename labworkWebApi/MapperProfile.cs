@@ -6,13 +6,12 @@ namespace labworkWebApi
 {
     public class MapperProfile : Profile
     {
-        public MapperProfile() 
+        public MapperProfile()
         {
             CreateMap<GameAddDto, Game>();
             CreateMap<Game, GameGetDto>()
                 .ForMember(dest => dest.FullCompany,
-                    opt => opt.MapFrom(src => $"{src.Developer} | {src.Publisher}"))
-                ;
+                    opt => opt.MapFrom(src => $"{src.Developer} | {src.Publisher}"));
 
             //.ForMember(dest => dest.Category,
             //    opt => opt.Ignore())
