@@ -1,4 +1,7 @@
 
+using labworkWebApp.Models.Game;
+using labworkWebApp.Services;
+
 namespace labworkWebApp
 {
     public class Program
@@ -12,6 +15,10 @@ namespace labworkWebApp
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+
+            builder.Services.AddScoped<GameApiService>();
+
 
             var app = builder.Build();
 

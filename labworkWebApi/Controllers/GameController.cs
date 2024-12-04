@@ -2,7 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using labworkData;
 using labworkWebApi.Configuration;
-using labworkWebApi.Models;
+using labworkWebApi.Models.Game;
 using labworkWebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -60,13 +60,17 @@ public class GameController(ILogger<GameController> _logger,
         return game;
     }
     //получение всех строк
-    [HttpGet]
-    public List<GameGetDto> GetAll()
+    [HttpPost]
+    public List<GameGetDto> GetAll(GameFilterDto model)
     {
-        var games = _context.Games
-            .Include(p => p.Genre)
-            .ProjectTo<GameGetDto>(_mapper.ConfigurationProvider)
-            .ToList();
+
+
+        var query = _context.Games.AsQueryable();
+        if (!string.IsNullOrEmpty(model.Name)) query = query.Where(x => x.Name.Contains(model.Name));
+        if (!string.IsNullOrEmpty(model.Developer)) query = query.Where(x => x.Developer.Contains(model.Developer));
+        if (!string.IsNullOrEmpty(model.Publisher)) query = query.Where(x => x.Publisher.Contains(model.Publisher));
+        if (model.GenreId != null) query = query.Where(x => x.GenreId == model.GenreId);
+
 
         //var gameDto = games.Select(x => new GameGetDto
         //{
@@ -78,9 +82,10 @@ public class GameController(ILogger<GameController> _logger,
         //    Genre = x.Genre.Name,
         //}).ToList();
 
-        return games;
+        return query.Include(p => p.Genre)
+            .ProjectTo<GameGetDto>(_mapper.ConfigurationProvider)
+            .ToList();
     }
-
     //Удаление строки
     [HttpDelete]
     public void Delete(int id)

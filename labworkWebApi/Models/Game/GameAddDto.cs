@@ -1,4 +1,4 @@
-﻿namespace labworkWebApi.Models
+﻿namespace labworkWebApi.Models.Game
 {
     public class GameAddDto
     {

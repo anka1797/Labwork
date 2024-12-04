@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using labworkData;
-using labworkWebApi.Models;
+using labworkWebApi.Models.Game;
 
 namespace labworkWebApi
 {

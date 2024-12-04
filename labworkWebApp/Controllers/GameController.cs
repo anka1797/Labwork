@@ -2,6 +2,7 @@ using labworkWebApp.Models;
 using labworkWebApp.Models.Game;
 using labworkWebApp.Models.GameGenre;
 using labworkWebApp.Models.GameViewModel;
+using labworkWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Text.Json;
@@ -11,42 +12,37 @@ namespace labworkWebApp.Controllers
     public class GameController : Controller
     {
         private readonly ILogger<GameController> _logger;
-        public GameController(ILogger<GameController> logger)
+        private readonly GameApiService _gameApiService;
+        public GameController(ILogger<GameController> logger, GameApiService gameApiService)
         {
             _logger = logger;
+            _gameApiService = gameApiService;
         }
-        #region -- Вывод всего списка
+
+        #region -- Вывод всего списка с фильтрами
+        [HttpGet]
         public async Task<IActionResult> Index() //Вывод таблицы
         {
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:5272/Game/GetAll");
-            var responseText = await response.Content.ReadAsStringAsync();
-
-            var responseData = JsonSerializer.Deserialize<List<GameDto>>(responseText, new JsonSerializerOptions
+            var viewModel = new GameViewModel
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                //PropertyNameCaseInsensitive = true,    вообще отключаем надобность регистра
-            });
-
-            return View(responseData);
+                Games = await _gameApiService.GetGame(new GameFilterDto()),
+                Genres = await _gameApiService.GetGenres()
+            };
+            return View(viewModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Index(GameFilterDto filter) //Вывод таблицы
+        {
+            
+            var viewModel = new GameViewModel
+            {
+                Games = await _gameApiService.GetGame(filter),
+                Genres = await _gameApiService.GetGenres()
+            };
+            return View(viewModel);
         }
         #endregion
-        private async Task<List<GenreDto>> GetGenres()
-        {
-
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:5272/GameGenre/GetAll");
-            var responseText = await response.Content.ReadAsStringAsync();
-
-            var responseData = JsonSerializer.Deserialize<List<GenreDto>>(responseText, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                //PropertyNameCaseInsensitive = true,    вообще отключаем надобность регистра
-            });
-
-            return responseData;
-
-        }
+        
 
 
         #region -- Добавление
@@ -56,7 +52,7 @@ namespace labworkWebApp.Controllers
         {
             var viewModel = new GameAddViewModel()
             {
-                Genres = await GetGenres(),
+                Genres = await _gameApiService.GetGenres(),
                 Game = dto
             };
             if (!ModelState.IsValid)
@@ -79,7 +75,7 @@ namespace labworkWebApp.Controllers
 
             var viewModel = new GameAddViewModel()
             {
-                Genres = await GetGenres()
+                Genres = await _gameApiService.GetGenres()
             };
             return View(viewModel);
 
@@ -107,7 +103,7 @@ namespace labworkWebApp.Controllers
         {
             var viewModel = new GameEditViewModel()
             {
-                Genres = await GetGenres()
+                Genres = await _gameApiService.GetGenres()
                 //Game = responseData
             };
             if (!ModelState.IsValid)
@@ -139,7 +135,7 @@ namespace labworkWebApp.Controllers
             });
             var viewModel = new GameEditViewModel()
             {
-                Genres = await GetGenres(),
+                Genres = await _gameApiService.GetGenres(),
                 Game = responseData
             };
             return View(viewModel);
