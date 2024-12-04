@@ -5,7 +5,7 @@ namespace labworkWebApp.Models.GameViewModel
 {
     public class GameEditViewModel
     {
-        public GameDto Game { get; set; }
+        public GameDto? Game { get; set; }
         public List<GenreDto> Genres { get; set; }
     }
 }

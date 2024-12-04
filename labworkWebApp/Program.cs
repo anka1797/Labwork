@@ -18,7 +18,10 @@ namespace labworkWebApp
 
 
             builder.Services.AddScoped<GameApiService>();
-
+            builder.Services.AddHttpClient("GameApi", httpClient =>
+            {
+                httpClient.BaseAddress = new Uri("http://localhost:5272");
+            });
 
             var app = builder.Build();
 

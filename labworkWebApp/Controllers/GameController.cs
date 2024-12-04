@@ -1,11 +1,9 @@
 using labworkWebApp.Models;
 using labworkWebApp.Models.Game;
-using labworkWebApp.Models.GameGenre;
 using labworkWebApp.Models.GameViewModel;
 using labworkWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Text.Json;
 
 namespace labworkWebApp.Controllers
 {
@@ -59,9 +57,9 @@ namespace labworkWebApp.Controllers
             {
                 return View(viewModel);
             }
-            var httpClient = new HttpClient();
-            var response = await httpClient.PutAsJsonAsync("http://localhost:5272/Game/Add", dto);
-            if (!response.IsSuccessStatusCode)
+            var result = await _gameApiService.AddGame(dto);
+
+            if (!result)
             {
                 ModelState.AddModelError("api_erorr", "Ошибка валидации данных");
                 return View(viewModel);
@@ -85,14 +83,10 @@ namespace labworkWebApp.Controllers
         #region -- Удаление
         public async Task<IActionResult> Delete(int id)
         {
-            var httpClient = new HttpClient();
-            var response = await httpClient.DeleteAsync($"http://localhost:5272/Game/Delete/?id={id}");
-
-            if (!response.IsSuccessStatusCode)
-            {
-                //удаление не удалось
-            }
-            TempData["Message"] = "Игра удалена успешно";
+            var result = await _gameApiService.DeleteGame(id);
+            
+            TempData["Message"] = result ? "Игра удалена успешно" : "Ошибка удаления";
+            
             return RedirectToAction(nameof(Index));
         }
         #endregion
@@ -110,9 +104,9 @@ namespace labworkWebApp.Controllers
             {
                 return View(dto);
             }
-            var httpClient = new HttpClient();
-            var response = await httpClient.PostAsJsonAsync("http://localhost:5272/Game/Edit", dto);
-            if (!response.IsSuccessStatusCode)
+
+            var result = await _gameApiService.EditGame(dto);
+            if (!result)
             {
                 ModelState.AddModelError("api_erorr", "Ошибка валидации данных");
                 return View(dto);
@@ -123,21 +117,11 @@ namespace labworkWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id) //достаем нужную строку
         {
-            
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"http://localhost:5272/Game/Get?id={id}");
-            var responseText = await response.Content.ReadAsStringAsync();
-
-            var responseData = JsonSerializer.Deserialize<GameDto>(responseText, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                //PropertyNameCaseInsensitive = true,    вообще отключаем надобность регистра
-            });
             var viewModel = new GameEditViewModel()
             {
                 Genres = await _gameApiService.GetGenres(),
-                Game = responseData
-            };
+                Game = await _gameApiService.GetGame(id),
+        };
             return View(viewModel);
         }
         #endregion
